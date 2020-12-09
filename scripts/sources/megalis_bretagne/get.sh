@@ -7,7 +7,7 @@
 #wget -r -q -nc -nd -nH --accept=xml -np http://lyzen.fr/DECP/DECP-253514491-2020-09-28-01.xml
 
 
-curl https://www.data.gouv.fr/api/1/datasets// | jq -r '.resources[].url' | grep -E 'static.*xml'
+#curl https://www.data.gouv.fr/api/1/datasets// | jq -r '.resources[].url' | grep -E 'static.*xml'
 
 
 # Récupération des données essentielles publiées - MEGALIS BRETAGNE
