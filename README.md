@@ -4,7 +4,7 @@
 
 [![CircleCI](https://circleci.com/gh/139bercy/decp-rama.svg?style=svg)](https://circleci.com/gh/139bercy/decp-rama)
 
-Ce doucment décrit la manière dont les données essentielles de la commande publique sont consolidées techniquement. Vous trouverez davantage d'information sur les données essentielles de la commande publique sur https://139bercy.github.io/decp-docs/.
+Ce document décrit la manière dont les données essentielles de la commande publique sont consolidées techniquement. Vous trouverez davantage d'information sur les données essentielles de la commande publique sur https://139bercy.github.io/decp-docs/.
 
 **Version 1.15.1**
 
