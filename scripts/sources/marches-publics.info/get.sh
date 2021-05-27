@@ -29,6 +29,3 @@ count=`ls -1 | wc -l`
 
 echo ""
 echo "$count fichiers téléchargés."
-
-
-$(dirname $0)/get-aws-marchespublics.sh
