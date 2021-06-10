@@ -1,5 +1,11 @@
 ---
-version: 2
+version: 2.1
+
+parameters:
+  rollback_job:
+      type: boolean
+      default: false
+
 jobs:
     get_data:
       docker:
@@ -58,6 +64,26 @@ jobs:
             name: Publication des données sur (next.)data.gouv.fr
             command: |
                 ./publish-decp.sh
+        - run:
+            name: run rollback job
+            command: |
+                curl -X POST 'https://circleci.com/api/v2/project/gh/139bercy/decp-rama/pipeline' -H 'circle-token: '${CIRCLE_TOKEN} -H 'content-type: application/json' -d '{"branch":"master", "parameters":{"rollback_job": true}}'
+            when: on_fail
+
+    rollback_publish:
+      docker:
+        - image: 139bercy/decp-rama
+      steps:
+        - checkout
+        - run: date -d '-1 day' +%F > date
+        - restore_cache:
+            keys:
+              - data-out-master-{{ checksum "date" }}
+        - run:
+            name: Publication des données sur (next.)data.gouv.fr
+            command: |
+                date=$(date -d '-1 day' +%F) ./publish-decp.sh
+
 workflows:
     version: 2
     data:
@@ -65,13 +91,15 @@ workflows:
         - get_data
       triggers:
         - schedule:
-            cron: 0 1 * * 2,3,4,5,6
+            cron: 0 1 * * 1,2,3,4,5,6 # d'après la doc circle ci, 1-6 n'est pas supporté (même si cela semble avoir fonctionné)
             filters:
               branches:
                 only:
                   - master
 
     dev:
+      when:
+        not: << pipeline.parameters.rollback_job >>
       jobs:
           # - hold: # <<< A job that will require manual approval in the CircleCI web application.
           #     type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
@@ -102,3 +130,10 @@ workflows:
               branches:
                 only:
                   - master
+
+    rollback_publish:
+      when: << pipeline.parameters.rollback_job >>
+      jobs:
+        - rollback_publish:
+            context:
+              - decp-rama-context

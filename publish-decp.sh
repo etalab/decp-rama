@@ -61,7 +61,10 @@ case ${CIRCLE_BRANCH} in
 
         curl "$api/datasets/$dataset_id/resources/${resource_id}/upload/" -F "file=@${ext}/decp.${ext}" -H "X-API-KEY: $api_key"
 
-        date=`date "+%F"`
+        if [[ -z $date ]]
+        then
+          date=`date "+%F"`
+        fi
 
         echo "Publication de decp_$date.${ext}..."
 

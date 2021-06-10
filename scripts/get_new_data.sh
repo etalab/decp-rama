@@ -31,6 +31,12 @@ Ancien fichier :        $nbMarchesUniqueOld marchés uniques (via uid)\n
 Nouveau fichier :       $nbMarchesUniqueNew marchés uniques\n
                         $nbNewMarches nouveaux marchés uniques\n"
 
+if [[ "$$nbMarchesUniqueOld" == "0" ]]
+then
+  echo "Arrêt du processus car il n'est pas normal de n'avoir aucun marchés uniques dans l'ancien fichier"
+  exit -1
+fi
+
 #generation du fichier du jour dans le fichier temp.json
 python3.7 scripts/python/generateDailyDecp.py $newFile
 
