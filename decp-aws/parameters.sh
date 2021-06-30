@@ -3,6 +3,8 @@
 
 export api="https://www.data.gouv.fr/api/1"
 export dataset_id="5cdb1722634f41416ffe90e2"
+#API_KEY configurée dans les options de build de CircleCI
+export api_key=$API_KEY
 
 if [[ -z ${dateDebut} ]]
 then
@@ -12,4 +14,11 @@ fi
 if [[ -z ${dateFin} ]]
 then
     dateFin=$(date -I -d '-1 days')
+    if [[ "$(date -d $dateFin +%Y)" != "$(date -d $dateDebut +%Y)" ]]
+    then
+      dateFin="$(date -d ${dateDebut} +%Y)-12-31"
+    fi
 fi
+
+echo "dateDebut: ${dateDebut}"
+echo "dateFin: ${dateFin}"

@@ -18,6 +18,9 @@ function download() {
 
 function check_and_correct () {
   local file="$1"
+  # Ce paramètre permet de spécifier quel type de correction on souhaite appliquer.
+  # De cette manière on peut enchaîner les correction en faisant l'appel qui va bien après une correction.
+  # Vous pouvez regarder correct_simple pour un exemple. La fonction doit s'appeler correct_<param $2>
   local type="${2:-simple}"
 
   check "$file"
@@ -72,3 +75,6 @@ if [[ "${dateNotifDebut}" < "${dateFin}" ]]
 then
   download "${dateNotifDebut}" "${dateFin}"
 fi
+
+newFileName="aws-marchespublics-annee-$(date -d "$dateDebut" +%Y).json"
+jq -n '{ marches: [ inputs.marches ] | add }' aws-marchespublics-$(date -d "$dateDebut" +%Y)*.json > "$newFileName"
