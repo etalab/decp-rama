@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-
 export api="https://www.data.gouv.fr/api/1"
 export dataset_id="5cdb1722634f41416ffe90e2"
+# test
+# export dataset_id="60f6c0de78e71c3728d8c37d"
+#
 #API_KEY configurée dans les options de build de CircleCI
 export api_key=$API_KEY
 

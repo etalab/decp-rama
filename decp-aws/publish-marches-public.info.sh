@@ -2,11 +2,12 @@
 
 # fail on error
 set -e
+set -x
 
 source $(dirname $0)/parameters.sh
 
 newFileName="aws-marchespublics-annee-$(date -d "$dateDebut" +%Y).json"
-
+echo $newFileName
 
 if [[ ! -f ${newFileName} ]]
 then
@@ -14,11 +15,13 @@ then
     exit 1
 fi
 
-resource_id="$(curl "https://www.data.gouv.fr/api/1/datasets/${dataset_id}/" | jq -r '.resources[] | select(.url | test(".*/'$(basename $newFileName)'")) | .id')"
+resource_id="$(curl "${api}/datasets/${dataset_id}/" | jq -r '.resources[] | select(.url | test(".*/'$(basename $newFileName)'")) | .id')"
 if [[ -z $resource_id ]]
 then
-  curl "$api/datasets/$dataset_id/upload/" -F "file=@@${newFileName}" -F "filename=$(basename ${newFileName})" -H "X-API-KEY: $api_key" > resource.json
+  echo "Création du fichier sur data.gouv"
+  curl "$api/datasets/$dataset_id/upload/" -F "file=@${newFileName}" -F "filename=$(basename ${newFileName})" -H "X-API-KEY: ${api_key}" > resource.json
   resource_id=`jq -r '.id' resource.json`
 fi
 
-curl "$api/datasets/${dataset_id}/resources/${resource_id}/upload/" -F "file=@${newFileName}" -H "X-API-KEY: $api_key"
+echo "Upload du fichier sur data.gouv"
+curl "${api}/datasets/${dataset_id}/resources/${resource_id}/upload/" -F "file=@${newFileName}" -H "X-API-KEY: ${api_key}"
