@@ -153,7 +153,6 @@ workflows:
     data:
       jobs:
         - get_data
-        - get_marches_public_info
       triggers:
         - schedule:
             cron: 0 1 * * 2,3,4,5,6
@@ -189,9 +188,6 @@ workflows:
               - decp-rama-context
             requires:
               - process
-        - publish_marches_public_info:
-            context:
-              - decp-rama-context
       triggers:
         - schedule:
             cron: 0 3 * * 2,3,4,5,6
@@ -201,6 +197,7 @@ workflows:
                   - master
     weekly:
       jobs:
+        - get_marches_public_info
         - publish_marches_public_info:
             context:
               - decp-rama-context
